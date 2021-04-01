@@ -8,13 +8,14 @@ Class Calendar {
 
 		$today = strftime('%e %B %Y');
 
-		if ( isset($year) AND is_numeric($year) ) {
+		if ( isset($year) AND is_numeric(intval($year)) ) {
+
+			$calendar = array();
 
 			for ($i=1; $i<=12; $i++){ 
 
 				$month = mktime(0, 0, 0, $i, 1, $year);
-				$month_wr = strftime('%B', $month);
-				$calendar[$month_wr]='';
+				$month_ok = strftime('%B', $month);
 
 				$day_max = cal_days_in_month(CAL_GREGORIAN, $i, $year);
 
@@ -23,9 +24,9 @@ Class Calendar {
 					$day = mktime(0, 0, 0, $i, $j, $year);
 					$day_wr = strftime('%e %B %Y', $day);
 					if ($today === $day_wr) { 
-						$calendar[$month_wr][$j] = '<strong>'.$day_wr.'</strong>';
+						$calendar[$month_ok][$j] = '<strong>'.$day_wr.'</strong>';
 					}else{ 
-						$calendar[$month_wr][$j] = $day_wr ;
+						$calendar[$month_ok][$j] = $day_wr ;
 					}
 					$j++;
 				}
@@ -53,15 +54,17 @@ Class Calendar {
   <body>
   	
   	<?php
-  		$mon_calendrier = new Calendar;	
-		$cal_thisYear = $mon_calendrier->getCalendar(date(Y));
+
+  		$mon_calendrier = new Calendar;
+  		$annee = date('Y');
+  		$annee = 2046;
+		$cal_thisYear = $mon_calendrier->getCalendar($annee);
 
   		$result = '<table><thead><tr>';
   		foreach ($cal_thisYear as $mois => $value) {	
   			$result .= '<th>'. $mois . '</th>';
   		}
   		$result .= '</tr></thead><tbody>';
-  		
   		$d=1;
   		while ($d <= 31) {
 	  		$result  .=  '<tr>';
